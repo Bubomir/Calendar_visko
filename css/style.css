@@ -1,0 +1,91 @@
+
+#external-events .fc-event {
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+
+#popup-info{
+    height: 88px;
+    width: 250px;
+    background: white;
+    position:absolute;
+    z-index:10001;
+     box-shadow: 4px 4px 10px #333;
+}
+
+#popup-info ul {
+    list-style: none;
+    margin: 0px;
+    padding-left: 5px;
+}
+
+#popup-info ul li{
+    padding-top: 5px;
+}
+#popup-info ul li svg{
+    float: left;
+}
+
+#popup-name{
+    font-size: 14px;
+    padding-left: 30px;
+}
+#popup-email{
+    font-size: 14px;
+    padding-left: 30px;
+}
+#popup-number{
+    font-size: 14px;
+    padding-left: 30px;
+}
+.brigLogIn2{
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+.brigLogIn2:hover{
+    box-shadow: inset 0px 0px 0px 2px #3a87ad;
+    background: white;
+    color: #3a87ad;
+}
+
+.night-change{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.morning-change{
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#supervizor-event-morning{
+    background: darkorange;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#supervizor-event-morning:hover{
+    background: white;
+    box-shadow: inset 0px 0px 0px 1px darkorange;
+    color: darkorange;
+}
+
+#supervizor-event-night{
+    background: black;
+     margin: 0 auto;
+    width: 100%;
+}
+#supervizor-event-night:hover{
+    background: white;
+    box-shadow: inset 0px 0px 0px 1px black;
+    color: black;
+}
+
+#brig-button{
+    background: green;
+}
+#brig-button:hover{
+    color: green;
+    background: white;
+    box-shadow: inset 0px 0px 0px 1px green;
+}
