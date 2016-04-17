@@ -670,39 +670,40 @@ $(document).ready(function () {
                     } else {
                         var now = moment(new Date()).format();
                         var click_time = moment(event.start.format());    
-                        var current_date = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
                         var diff = moment.duration(click_time.diff(now)).asMinutes();
 
-                        if (diff > 0 && (event.title.search("    R Brigádnici:") === 0 || event.title.search("  N Brigádnici:") === 0)) {
-
-                            swal({
-                                    title: "Přihlásit?",
-                                    text: "Opravdu se chcete přihlásit na tuto směnu?",
-                                    type: "warning",
-                                    showCancelButton: true,
-                                    confirmButtonColor: "orange",
-                                    confirmButtonText: "Přihlásit",
-                                    cancelButtonText: "Zrušit",
-                                    closeOnConfirm: false
-                                },
-                                function () {
-                                    swal({
-                                        title: "Přihlášen",
-                                        text: "Byli jste přihlášeni.",
-                                        type: "success",
-                                        confirmButtonColor: "#005200"
+                        if (event.title.search("    R Brigádnici:") === 0 || event.title.search("  N Brigádnici:") === 0) {
+                            if(diff > 0){
+                                swal({
+                                        title: "Přihlásit?",
+                                        text: "Opravdu se chcete přihlásit na tuto směnu?",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "orange",
+                                        confirmButtonText: "Přihlásit",
+                                        cancelButtonText: "Zrušit",
+                                        closeOnConfirm: false
+                                    },
+                                    function () {
+                                        swal({
+                                            title: "Přihlášen",
+                                            text: "Byli jste přihlášeni.",
+                                            type: "success",
+                                            confirmButtonColor: "#005200"
+                                        });
+                                        loggedInUpdate(event, loggedData.email, 1);
                                     });
-                                    loggedInUpdate(event, loggedData.email, 1);
+                            }
+                            else{
+                                swal({
+                                    title: "Přihlášení zakázáno",
+                                    text: "Již není možné se přihlásit!",
+                                    type: "error",
+                                    confirmButtonColor: "#d62633"
                                 });
+                            }
                         }
-                        else{
-                            swal({
-                                title: "Přihlášení zakázáno",
-                                text: "Již není možné se přihlásit!",
-                                type: "error",
-                                confirmButtonColor: "#d62633"
-                            });
-                        }
+                        
 
                     }
                 }
