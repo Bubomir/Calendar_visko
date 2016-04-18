@@ -153,7 +153,7 @@ if($type == 'check_data'){
     $current_time = new DateTime(date('c'));
     $interval_time = $current_time->diff($click_time);
 
-    $final_interval= ((int)($interval_time->format('%a')));
+    $final_interval= ((int)($interval_time->format('%R%a')));
 
      $check_data = array(
          "logIN_logOUT"=> "$count_check_logIN_logOUT",

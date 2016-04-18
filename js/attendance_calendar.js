@@ -634,7 +634,7 @@ $(document).ready(function () {
                     }
                 });
                 var check_data = JSON.parse(check_ajax_data.responseText);
-
+                console.log('test check data ', check_data);
                 if (loggedData.permission === 'brigadnik') {
                     if ((check_data.logIN_logOUT !== '0' && event.title.search("    R Brigádnici:") === 0) || (check_data.logIN_logOUT !== '0' && event.title.search("  N Brigádnici:") === 0)) {
                         if (check_data.interval > 5) {
