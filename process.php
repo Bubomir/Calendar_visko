@@ -224,14 +224,16 @@ if($type == 'change_number_of_logged_in'){
             if($e_logged_in < $e_capacity){
                 //inkrementacia poctu pre prihlasenie
                 $e_logged_in++;
-                $update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' where ID='$event_id'");
+                
 
-                $insert = mysqli_query($db,"INSERT INTO $table_calendar(p_Email, Start_Date, End_Date, Capacity, Logged_In) VALUES('$email','$e_start_date','$end_date','null','null')");
-                $lastid = mysqli_insert_id($db);
+                $insert = "INSERT INTO $table_calendar(p_Email, Start_Date, End_Date, Capacity, Logged_In) VALUES('$email','$e_start_date','$end_date','null','null')";
+                
                 //Sending mail
-                if($insert){
-                    //Email content
+                if(mysqli_query($db, $insert)){
+                	$update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' where ID='$event_id'");
 
+                    //Email content
+                	$lastid = mysqli_insert_id($db);
                     $to = $email_to_Mail['p_Email'];   //$email_to_Mail['p_Email']; - tento mail sa posiela supervizorom na ich zmene
                     $subject = 'Přihlášení na pracovní směnu';
                     $message = "Brigádník: <strong>".$mail_name.'</strong> byl přihlášen na pracovní směnu dne: <strong>'.$e_start_date.'</strong><br><br>
@@ -256,12 +258,13 @@ if($type == 'change_number_of_logged_in'){
         case -1:{
             
             //dekrementacia poctu pre prihlasenie
-            if((int)($interval_time->format('%a'))>5 && $e_logged_in>0){
+            if((int)($interval_time->format('%R%a'))>5 && $e_logged_in>0){
                 $e_logged_in--;
-                $update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' WHERE ID='$event_id'");
-                $delete = mysqli_query($db,"DELETE FROM $table_calendar WHERE ID='$del_id'");
+                
+                $delete = "DELETE FROM $table_calendar WHERE ID='$del_id'";
                 //Sending mail
-                if($delete){
+                if(mysqli_query($db, $delete)){
+                	$update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' WHERE ID='$event_id'");
                     //Email content
 
                     $to = $email_to_Mail['p_Email'];   //$email_to_Mail['p_Email'] - tento mail sa posiela supervizorom na ich zmene
@@ -298,8 +301,6 @@ if($type == 'remove')
     
     $e_start_time = $fetch['Start_Date'];
     $e_permissions = $fetch['Permissions'];
-   
-   
     
     if($e_permissions=='brigadnik'){
         $email = $email_brigadnici;
@@ -308,22 +309,21 @@ if($type == 'remove')
         $e_id = $fetch_2['ID'];
         $e_logged_in = $fetch_2['Logged_In'];
         $e_logged_in--; //decrementation capacity on brigadnici Event
-
-        $update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' WHERE ID='$e_id'");
-        $delete = mysqli_query($db,"DELETE FROM $table_calendar where ID='$event_id'");
         
+        $delete = "DELETE FROM $table_calendar where ID = '$event_id'";
     }
     else{
         if($permmison_acount=='admin'){
-            $delete = mysqli_query($db,"DELETE FROM $table_calendar where ID='$event_id'");
+            $delete = "DELETE FROM $table_calendar where ID = '$event_id'";
         }
     }
-    
 
-	if($delete)
-		echo 'success';
-	else
-		echo 'failed';
+    if (mysqli_query($db, $delete)) {
+    	if($e_permissions=='brigadnik'){
+    		$update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' WHERE ID = '$e_id' ");
+    	}
+	    echo "success";
+	} 
 }
 if($type == 'fetch'){
 

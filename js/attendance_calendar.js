@@ -115,9 +115,7 @@ $(document).ready(function () {
                 },
                 function (isConfirm) {
                     if (isConfirm) {
-                        //CREATE NOTIFICATION
-                        addNotification(event.id, 'logOut');
-
+                        
                         return_response = $.ajax({
                             url: 'process.php',
                             data: 'type=remove&event_id=' + event.id + '&permissionAcount=' + accountPermmision,
@@ -131,7 +129,7 @@ $(document).ready(function () {
                                 //window.console.log(e.responseText);
                             }
                         });
-
+                        
                         if ('success' === return_response.responseText) {
                             swal({
                                 title: "Smazáno",
@@ -139,11 +137,12 @@ $(document).ready(function () {
                                 type: "success",
                                 confirmButtonColor: "#005200"
                             });
-
+                            //CREATE NOTIFICATION
+                            addNotification(event.id, 'logOut');
                             refreshEvents();
 
                         } else {
-                            window.alert('chyba pri zmazavani');
+                            window.alert('chyba pri smazavaní');
                         }
                     }
                 }
@@ -269,21 +268,22 @@ $(document).ready(function () {
                                     }
                                 });
                                 var newEventID = JSON.parse(return_response.responseText);
-
-                                addNotification(newEventID.eventID, 'logIn');
-                                //background Refresh events
-                                refreshEvents();
-                                //render list of brigadnici
-                                swal({
-                                        title: "Přihlášen!",
-                                        text: "Brigádník byl přihlášen na tuto směnu.",
-                                        type: "success",
-                                        confirmButtonColor: "#005200",
-                                        closeOnConfirm: false
-                                    },
-                                    function () {
-                                        brigadniciListRender(eventId, eventStartDate);
-                                    });
+                                if(newEventID.status == "success"){
+                                    addNotification(newEventID.eventID, 'logIn');
+                                    //background Refresh events
+                                    refreshEvents();
+                                    //render list of brigadnici
+                                    swal({
+                                            title: "Přihlášen!",
+                                            text: "Brigádník byl přihlášen na tuto směnu.",
+                                            type: "success",
+                                            confirmButtonColor: "#005200",
+                                            closeOnConfirm: false
+                                        },
+                                        function () {
+                                            brigadniciListRender(eventId, eventStartDate);
+                                        });
+                                }
 
                             } else {
                                 brigadniciListRender(eventId, eventStartDate);
@@ -638,7 +638,6 @@ $(document).ready(function () {
                 if (loggedData.permission === 'brigadnik') {
                     if ((check_data.logIN_logOUT !== '0' && event.title.search("    R Brigádnici:") === 0) || (check_data.logIN_logOUT !== '0' && event.title.search("  N Brigádnici:") === 0)) {
                         if (check_data.interval > 5) {
-
                             swal({
                                     title: "Odhlásit?",
                                     text: "Opravdu se chcete odhlásit z této směny?",
