@@ -222,18 +222,18 @@ if($type == 'change_number_of_logged_in'){
             
             //Osetrenie voci prektroceniu kapacity na smene
             if($e_logged_in < $e_capacity){
-                //inkrementacia poctu pre prihlasenie
-                $e_logged_in++;
                 
-
                 $insert = "INSERT INTO $table_calendar(p_Email, Start_Date, End_Date, Capacity, Logged_In) VALUES('$email','$e_start_date','$end_date','null','null')";
                 
                 //Sending mail
                 if(mysqli_query($db, $insert)){
+                    //inkrementacia poctu pre prihlasenie
+                    $e_logged_in++;
+                    $lastid = mysqli_insert_id($db);
                 	$update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' where ID='$event_id'");
 
                     //Email content
-                	$lastid = mysqli_insert_id($db);
+                	
                     $to = $email_to_Mail['p_Email'];   //$email_to_Mail['p_Email']; - tento mail sa posiela supervizorom na ich zmene
                     $subject = 'Přihlášení na pracovní směnu';
                     $message = "Brigádník: <strong>".$mail_name.'</strong> byl přihlášen na pracovní směnu dne: <strong>'.$e_start_date.'</strong><br><br>
@@ -242,12 +242,13 @@ if($type == 'change_number_of_logged_in'){
                     tel.č: '.$mail_phone_num;
                     $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-                  //  mail($to, $subject, $message, $headers);
+                   // mail($to, $subject, $message, $headers);
 
                     $succes = array(
                          "status"=> "success",
                          "eventID"=> "$lastid"
                     );
+                    
                     echo json_encode($succes);
                 }
 
@@ -257,13 +258,15 @@ if($type == 'change_number_of_logged_in'){
             
         case -1:{
             
-            //dekrementacia poctu pre prihlasenie
+           
             if((int)($interval_time->format('%R%a'))>5 && $e_logged_in>0){
-                $e_logged_in--;
                 
                 $delete = "DELETE FROM $table_calendar WHERE ID='$del_id'";
+
                 //Sending mail
                 if(mysqli_query($db, $delete)){
+                     //dekrementacia poctu pre prihlasenie
+                    $e_logged_in--;
                 	$update = mysqli_query($db,"UPDATE $table_calendar SET Logged_In='$e_logged_in' WHERE ID='$event_id'");
                     //Email content
 
@@ -277,12 +280,13 @@ if($type == 'change_number_of_logged_in'){
                     $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
 
-                  //  mail($to, $subject, $message, $headers);
+                   // mail($to, $subject, $message, $headers);
 
                     $succes = array(
                         "status"=> "success",
                         "eventID"=> "$del_id"
                     );
+                    
                     echo json_encode($succes);
                 }
             }
@@ -429,7 +433,7 @@ if($type == 'addNotification'){
      }
 
     $insert = mysqli_query($db,"INSERT INTO $table_notification (p_Email_KTO, p_Email_KOMU, p_Email_KOHO, Activity, Start_Date, TimeStamp) VALUES('$emailKTO','$emailKOMU','$emailKOHO','$activity','$startDate','$timeStamp')");
-
+    $lastid = mysqli_insert_id($db);
 
     $result_mail_brig = mysqli_query($db, "SELECT First_Name, Surname, Change_Number FROM $table_calendar INNER JOIN $table_employees ON $table_employees.Email = $table_calendar.p_Email WHERE Start_Date = '$startDate' AND Email = '$emailKOMU' ");
     $fetch_mail_brig = mysqli_fetch_array($result_mail_brig,MYSQLI_ASSOC);
@@ -449,7 +453,7 @@ if($type == 'addNotification'){
                         $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
 
-          //  mail($to, $subject, $message, $headers);
+           // mail($to, $subject, $message, $headers);
         }
         if($activity == 'logOut'){
             //SEND BRIGADNIK MAIL
@@ -459,7 +463,7 @@ if($type == 'addNotification'){
             Tento email bol poslaný zo stránky www.vtstudentplanner.cz";
             $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-         //   mail($to, $subject, $message, $headers);
+          //  mail($to, $subject, $message, $headers);
 
             //SEND MASTER MAIL
             $to_2 = $emailKOMU;   //$email_to_Mail['p_Email']; - tento mail sa posiela supervizorom na ich zmene
@@ -471,13 +475,20 @@ if($type == 'addNotification'){
             Tento email bol poslaný zo stránky www.vtstudentplanner.cz';
             $headers_2 = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-          //  mail($to_2, $subject_2, $message_2, $headers_2);
+           // mail($to_2, $subject_2, $message_2, $headers_2);
         }
-
-        echo 'success';
+        $result = array(
+        "status"=> "success",
+        "id"=> "$lastid"
+        );
+        echo json_encode($result);
     }
     else{
-        echo 'failed';
+        $result = array(
+        "status"=> "failed",
+        "id"=> "$lastid"
+        );
+        echo json_encode($result);
     }
 }
 
@@ -520,6 +531,16 @@ if($type == 'canAdd'){
 
 
     echo $count;
+}
+if($type == 'removeNotification'){
+    $notificationid = $_POST['event_id'];
+
+    // sql to delete a record
+    $sql = "DELETE FROM $table_notification WHERE id = $notificationid";
+
+    if (!mysqli_query($db, $sql)) {
+         echo "Error deleting record: " . mysqli_error($conn);
+    }
 }
 
 

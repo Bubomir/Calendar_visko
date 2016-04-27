@@ -38,7 +38,7 @@ $(document).ready(function () {
                 return data;
             }
         });
-
+        return returndata.responseText;
     }
 
     /**********************************************/
@@ -115,7 +115,8 @@ $(document).ready(function () {
                 },
                 function (isConfirm) {
                     if (isConfirm) {
-                        
+                        //CREATE NOTIFICATION
+                        var last_id_notigication = addNotification(event.id, 'logOut');
                         return_response = $.ajax({
                             url: 'process.php',
                             data: 'type=remove&event_id=' + event.id + '&permissionAcount=' + accountPermmision,
@@ -129,6 +130,7 @@ $(document).ready(function () {
                                 //window.console.log(e.responseText);
                             }
                         });
+                        var lastNotification = JSON.parse(last_id_notigication);
                         
                         if ('success' === return_response.responseText) {
                             swal({
@@ -137,11 +139,24 @@ $(document).ready(function () {
                                 type: "success",
                                 confirmButtonColor: "#005200"
                             });
-                            //CREATE NOTIFICATION
-                            addNotification(event.id, 'logOut');
                             refreshEvents();
 
                         } else {
+                            
+                            return_response = $.ajax({
+                            url: 'process.php',
+                            data: 'type=removeNotification&event_id=' + lastNotification.id,
+                            type: 'POST',
+                            dataType: 'json',
+                            async: false,
+                            success: function (response) {
+                                return response;
+                            },
+                            error: function (e) {
+                                //window.console.log(e.responseText);
+                            }
+                            });
+
                             window.alert('chyba pri smazavaní');
                         }
                     }
@@ -268,7 +283,9 @@ $(document).ready(function () {
                                     }
                                 });
                                 var newEventID = JSON.parse(return_response.responseText);
+
                                 if(newEventID.status == "success"){
+                                    
                                     addNotification(newEventID.eventID, 'logIn');
                                     //background Refresh events
                                     refreshEvents();
@@ -634,7 +651,7 @@ $(document).ready(function () {
                     }
                 });
                 var check_data = JSON.parse(check_ajax_data.responseText);
-                console.log('test check data ', check_data);
+                
                 if (loggedData.permission === 'brigadnik') {
                     if ((check_data.logIN_logOUT !== '0' && event.title.search("    R Brigádnici:") === 0) || (check_data.logIN_logOUT !== '0' && event.title.search("  N Brigádnici:") === 0)) {
                         if (check_data.interval > 5) {
