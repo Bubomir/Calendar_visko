@@ -238,9 +238,10 @@ $(document).ready(function () {
                     return response;
                 },
                 error: function (e) {
-                    // window.console.log(e.responseText);
+                     window.console.log(e.responseText);
                 }
             });
+            
             refreshEvents();
     }
 
