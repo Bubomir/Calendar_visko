@@ -23,20 +23,26 @@
             $password = mysqli_real_escape_string($db,$_POST['password']);
             $result=mysqli_query($db,"SELECT * FROM $table_employees WHERE Email='$email'");
             $row=mysqli_fetch_array($result);
-            if($row['Password']==md5($password)){  
-                              
-                    
-                $update = mysqli_query($db,"UPDATE $table_employees SET Session_ID='$sessionID' WHERE Email='$email'");
-                if(!$update){
-                    echo "error insert Session ID to DB";
-                }
-                $_SESSION['user'] = $row['User_ID'];
-                header("Location: home.php");
-            }
-            else{
-                $alert_message = 'E-mail nebo heslo není správné!';
-                include ('template/alert_message.php');
-            }
+            $permissions = $row['Permissions'];
+            if($permissions == "brigadnid"|| $permissions == "admin"|| $permissions == "supervizor"){
+	            if($row['Password']==md5($password)){      
+	                $update = mysqli_query($db,"UPDATE $table_employees SET Session_ID='$sessionID' WHERE Email='$email'");
+	                if(!$update){
+	                    echo "error insert Session ID to DB";
+	                }
+	                $_SESSION['user'] = $row['User_ID'];
+	                header("Location: home.php");
+	            }
+	            else{
+	                $alert_message = 'E-mail nebo heslo není správné!';
+	                include ('template/alert_message.php');
+	            }
+        	}
+        	else
+        	{
+        		$alert_message = 'Tenhle účet nebyl aktivován!';
+	            include ('template/alert_message.php');
+        	}
         }
     
     mysqli_close($db);
