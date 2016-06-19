@@ -157,7 +157,7 @@ $(document).ready(function () {
                             }
                             });
 
-                            window.alert('chyba pri smazavaní');
+                            window.alert('chyba při smazavaní');
                         }
                     }
                 }
@@ -165,7 +165,7 @@ $(document).ready(function () {
         } else {
             swal({
                 title: "Chyba...",
-                text: "Pred zmazaním zmeny le potrebné odhlásiť všetkych brigádnikov a vymazať brigádnicky event!",
+                text: "Před smazáním změny je třeba odhlásit všech brigádníků a vymazat brigádnicku směnu!",
                 type: "error",
                 confirmButtonColor: "#d62633"
             });
@@ -238,10 +238,9 @@ $(document).ready(function () {
                     return response;
                 },
                 error: function (e) {
-                     window.console.log(e.responseText);
+                    // window.console.log(e.responseText);
                 }
             });
-            
             refreshEvents();
     }
 
@@ -1072,11 +1071,11 @@ $(document).ready(function () {
             numberOfChange = 0;
         } else if ($isRegistered == 3) {
             $('.alert').hide().slideDown(500);
-            document.getElementById('alert-message').innerHTML = "Nastala chyba pri registraci!!";
+            document.getElementById('alert-message').innerHTML = "Nastala chyba při registraci!!";
             numberOfChange = 0;
         } else if ($isRegistered == 4) {
             $('.alert').hide().slideDown(500);
-            document.getElementById('alert-message').innerHTML = "Uživatel s touto smenou již existuje!!";
+            document.getElementById('alert-message').innerHTML = "Uživatel s touto směnou již existuje!!";
             numberOfChange = 0;
         }
         // stop the form from submitting the normal way and refreshing the page

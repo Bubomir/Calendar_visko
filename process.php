@@ -242,7 +242,7 @@ if($type == 'change_number_of_logged_in'){
                     tel.č: '.$mail_phone_num;
                     $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-                    mail($to, $subject, $message, $headers);
+                   // mail($to, $subject, $message, $headers);
 
                     $succes = array(
                          "status"=> "success",
@@ -280,7 +280,7 @@ if($type == 'change_number_of_logged_in'){
                     $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
 
-                    mail($to, $subject, $message, $headers);
+                   // mail($to, $subject, $message, $headers);
 
                     $succes = array(
                         "status"=> "success",
@@ -453,7 +453,7 @@ if($type == 'addNotification'){
                         $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
 
-            mail($to, $subject, $message, $headers);
+          //  mail($to, $subject, $message, $headers);
         }
         if($activity == 'logOut'){
             //SEND BRIGADNIK MAIL
@@ -463,7 +463,7 @@ if($type == 'addNotification'){
             Tento email bol poslaný zo stránky www.vtstudentplanner.cz";
             $headers = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-            mail($to, $subject, $message, $headers);
+           // mail($to, $subject, $message, $headers);
 
             //SEND MASTER MAIL
             $to_2 = $emailKOMU;   //$email_to_Mail['p_Email']; - tento mail sa posiela supervizorom na ich zmene
@@ -475,7 +475,7 @@ if($type == 'addNotification'){
             Tento email bol poslaný zo stránky www.vtstudentplanner.cz';
             $headers_2 = 'From: noreply@vtstudentplanner.cz'."\r\n" . 'Content-type:text/html;charset=UTF-8' . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
-            mail($to_2, $subject_2, $message_2, $headers_2);
+           // mail($to_2, $subject_2, $message_2, $headers_2);
         }
         $result = array(
         "status"=> "success",
