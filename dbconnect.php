@@ -41,13 +41,13 @@
 
     $first_name_admin = 'Admin';
     $surname_admin = 'Super';
-    $password_admin = md5(mysqli_real_escape_string($db,'4FgT8*RRr7'));
+    $password_admin = md5(mysqli_real_escape_string($db,'')); //treba zadat default heslo pre admina
     $email_admin =  'admin@vtstudentplanner.cz';
     $permissions_admin = 'admin';
 
     $first_name_brigadnici = 'Brigádnici';
     $surname_brigadnici = ' ';
-    $password_brigadnici = md5(mysqli_real_escape_string($db,'R97qploxYy'));
+    $password_brigadnici = md5(mysqli_real_escape_string($db,'')); //treba zadat default heslo pre default ucet brigadnici
     $email_brigadnici = 'brigadnici@vtstudentplanner.sk';
     $permissions_brigadnici = 'supervizor';
 
